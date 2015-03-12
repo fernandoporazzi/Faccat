@@ -8,11 +8,11 @@ insert_final_newline = true
 
 # Matches multiple files with brace expansion notation
 # Set default charset
-[*.{js,py,go}]
+[*.{js,py,go,c,cpp}]
 charset = utf-8
 
 # 4 space indentation
-[*.py]
+[*.{py,c,cpp}]
 indent_style = space
 indent_size = 4
 
@@ -23,6 +23,9 @@ indent_size = 2
 [*.go]
 indent_style = space
 indent_size = 8
+
+[*.{c,cpp}]
+indent_style = tab
 
 # Matches the exact files either package.json or .travis.yml
 [{package.json,.travis.yml}]
