@@ -12,20 +12,22 @@ insert_final_newline = true
 charset = utf-8
 
 # 4 space indentation
-[*.{py,c,cpp}]
+[*.py]
 indent_style = space
 indent_size = 4
 
-[*.js]
+# Tab indentation by 4 spaces
+[*.{c,cpp}]
+indent_style = tab
+indent_size = 4
+
+[*.{js,html,css}]
 indent_style = space
 indent_size = 2
 
 [*.go]
 indent_style = space
 indent_size = 8
-
-[*.{c,cpp}]
-indent_style = tab
 
 # Matches the exact files either package.json or .travis.yml
 [{package.json,.travis.yml}]
