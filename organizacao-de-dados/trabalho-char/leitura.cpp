@@ -4,20 +4,17 @@
 
 int main()
 {    
-    char nome[30];
-    char dir[10] = "D:\\";
+    char fileName[30];
     char cTexto;
     FILE *arquivo;
     
     do{
          printf("Informe o nome do aquivo: ");
-         gets(nome);
-         strcat(nome, ".txt");
-         strcat(dir, nome);
-    }while(nome == NULL || nome == "");
+         gets(fileName);
+    }while(fileName == NULL || fileName == "");
     
     //TESTA SE O ARQUIVO EXISTE
-    if ((arquivo = fopen(dir, "r")) == NULL){
+    if ((arquivo = fopen(fileName, "r")) == NULL){
        printf("Fudeu, o arquivo nao existe!! \n\n");
     }else{
           //ENQUANTO NÃO CHEGAR AO FINAL DO ARQUIVO
