@@ -1,10 +1,12 @@
 'use strict';
 
-let matrizInicial = [
+var Immutable = require('immutable');
+
+const matrizInitial = Immutable.fromJS([
   [8, 7, 6],
   [5, 0, 4],
   [3, 2, 1]
-];
+]);
 
 const matrizFinal = [
   [0, 1, 2],
@@ -12,66 +14,79 @@ const matrizFinal = [
   [6, 7, 8]
 ];
 
-let matrizTemp = {};
+function each (matriz) {
+  let matrizTemp = [];
 
-for (let i = 0; i < matrizInicial.length; i++) {
-  
-  for (let j = 0; j < matrizInicial.length; j++) {
-
-    let atual = matrizInicial[i][j];
-
-    if (atual === 0) {
-      moverAcima(i, j);
+  for (let i = 0; i < matriz.size; i++) {
+    for (let j = 0; j < matriz.size; j++) {
+      matrizTemp.push(moveUp(matriz, i, j));
+      matrizTemp.push(moveDown(matriz, i, j));
+      matrizTemp.push(moveLeft(matriz, i, j));
+      matrizTemp.push(moveRigth(matriz, i, j));
     }
-
   }
 
+  return matrizTemp.filter(a => !!a);
 }
 
-function moverAcima (i, j) {
+function moveUp (matriz, i, j) {
+  let matrizTemp = matriz.toJS();
+
   var next = i-1;
-  if (next === 0) {
-    error('Posição acima inválida');
-  }
-  let atual = matrizInicial[i][j];
-  let temp = matrizInicial[next][j];
-  matrizInicial[next][j] = atual;
-  matrizInicial[i][j] = temp;
+  if (next < 0) return;
+
+  let temp = matrizTemp[next][j];
+  if (temp != 0) return;
+
+  let atual = matrizTemp[i][j];
+  matrizTemp[next][j] = atual;
+  matrizTemp[i][j] = temp;
+  return Immutable.fromJS(matrizTemp);
 };
 
-function moverAbaixo (i, j) {
+function moveDown (matriz, i, j) {
+  let matrizTemp = matriz.toJS();
+
   var next = i+1;
-  if (next === 2) {
-    error('Posição acima inválida');
-  }
-  let atual = matrizInicial[i][j];
-  let temp = matrizInicial[next][j];
-  matrizInicial[next][j] = atual;
-  matrizInicial[i][j] = temp;
+  if (next > 2) return;
+
+  let temp = matrizTemp[next][j];
+  if (temp != 0) return;
+
+  let atual = matrizTemp[i][j];
+  matrizTemp[next][j] = atual;
+  matrizTemp[i][j] = temp;
+  return Immutable.fromJS(matrizTemp);
 };
 
-function moverEsquerda (i, j) {
+function moveLeft (matriz, i, j) {
+  let matrizTemp = matriz.toJS();
+
   var next = j-1;
-  if (next === 0) {
-    error('Posição acima inválida');
-  }
-  let atual = matrizInicial[i][j];
-  let temp = matrizInicial[i][next];
-  matrizInicial[i][next] = atual;
-  matrizInicial[i][j] = temp;
+  if (next < 0) return;
+
+  let temp = matrizTemp[i][next];
+  if (temp != 0) return;
+
+  let atual = matrizTemp[i][j];
+  matrizTemp[i][next] = atual;
+  matrizTemp[i][j] = temp;
+  return Immutable.fromJS(matrizTemp);
 };
 
-function moverDireita (i, j) {
+function moveRigth (matriz, i, j) {
+  let matrizTemp = matriz.toJS();
+
   var next = j+1;
-  if (next === 0) {
-    error('Posição acima inválida');
-  }
-  let atual = matrizInicial[i][j];
-  let temp = matrizInicial[i][next];
-  matrizInicial[i][next] = atual;
-  matrizInicial[i][j] = temp;
+  if (next > 2) return;
+
+  let temp = matrizTemp[i][next];
+  if (temp != 0) return;
+
+  let atual = matrizTemp[i][j];
+  matrizTemp[i][next] = atual;
+  matrizTemp[i][j] = temp;
+  return Immutable.fromJS(matrizTemp);
 };
 
-function error (message) {
-  new Error(message);
-}
+console.log(each(matrizInitial));
