@@ -1,6 +1,6 @@
 'use strict';
 
-var Immutable = require('immutable');
+const Immutable = require('immutable');
 
 const matrizInitial = Immutable.fromJS([
   [8, 7, 6],
@@ -14,9 +14,66 @@ const matrizFinal = [
   [6, 7, 8]
 ];
 
-function each (matriz) {
-  let matrizTemp = [];
+let matrizTemp = matrizInitial;
+let matrizExists = [];
+let fineshed = true;
 
+while (fineshed) {
+  matrizExists.push(matrizTemp.toJS().toString());
+  console.log('matriz exists: %d', matrizExists.length);
+  console.log('MATRIZ: ', matrizTemp);
+  let children = getChildren(matrizTemp);
+  console.log('children: ', children);
+  matrizTemp = getMinimumMatriz(children);
+  if (!matrizTemp) fineshed = false;
+  console.log('\n\n');
+}
+
+function getMinimumMatriz (children) {
+  let index;
+  let minimum = Math.pow(2,32);
+  for (let i = 0; i < children.size; i++) {
+    let child = children.get(i).toJS();
+    for (var j = 0; j < matrizExists.length; j++) {
+      if (matrizExists[j] != child.toString()) {
+        let distance = getDistance(child);
+        if (distance < minimum) {
+          index = i;
+          minimum = distance;
+        }
+      }
+    }
+  }
+  if (minimum === 0) return null;
+  return children.get(index);
+};
+
+function getDistance (matriz) {
+  let distance = 0;
+  for (let i = 0; i < matrizFinal.length; i++) {
+    for (let j = 0; j < matrizFinal.length; j++) {
+      distance += calculateDistance(matriz, i, j);
+    }
+  }
+  return distance;
+};
+
+function calculateDistance (matriz, x, y) {
+  var original = matrizFinal[x][y];
+  for (let i = 0; i < matriz.length; i++) {
+    for (let j = 0; j < matriz.length; j++) {
+      let current = matriz[i][j];
+      if (original === current) {
+        let result = x-i < 0 ? (x-i)*-1 : x-i ;
+        result += y-j < 0 ? (y-j)*-1 : y-j ;
+        return result;
+      }
+    }
+  }
+};
+
+function getChildren (matriz) {
+  let matrizTemp = [];
   for (let i = 0; i < matriz.size; i++) {
     for (let j = 0; j < matriz.size; j++) {
       matrizTemp.push(moveUp(matriz, i, j));
@@ -25,9 +82,8 @@ function each (matriz) {
       matrizTemp.push(moveRigth(matriz, i, j));
     }
   }
-
-  return matrizTemp.filter(a => !!a);
-}
+  return Immutable.fromJS(matrizTemp.filter(a => !!a));
+};
 
 function moveUp (matriz, i, j) {
   let matrizTemp = matriz.toJS();
@@ -88,5 +144,3 @@ function moveRigth (matriz, i, j) {
   matrizTemp[i][j] = temp;
   return Immutable.fromJS(matrizTemp);
 };
-
-console.log(each(matrizInitial));
