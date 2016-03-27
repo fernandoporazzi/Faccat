@@ -17,15 +17,16 @@ const matrizFinal = [
 let matrizTemp = matrizInitial;
 let matrizExists = [];
 let fineshed = true;
+let count = 0;
 
 while (fineshed) {
   matrizExists.push(matrizTemp.toJS().toString());
-  console.log('matriz exists: %d', matrizExists.length);
-  console.log('MATRIZ: ', matrizTemp);
+  console.log('matriz current: ', matrizTemp.toJS());
   let children = getChildren(matrizTemp);
-  console.log('children: ', children);
+  console.log('children current: ', children.toJS());
   matrizTemp = getMinimumMatriz(children);
-  if (!matrizTemp) fineshed = false;
+  count += 1;
+  if (!fineshed) console.log('\n\ncount: %d - matriz final: ', count, matrizTemp.toJS());
   console.log('\n\n');
 }
 
@@ -34,35 +35,35 @@ function getMinimumMatriz (children) {
   let minimum = Math.pow(2,32);
   for (let i = 0; i < children.size; i++) {
     let child = children.get(i).toJS();
-    for (var j = 0; j < matrizExists.length; j++) {
-      if (matrizExists[j] != child.toString()) {
-        let distance = getDistance(child);
-        if (distance < minimum) {
-          index = i;
-          minimum = distance;
-        }
+
+    let exists = matrizExists.filter(matriz => matriz == child.toString())[0];
+    if (!exists) {
+      let distance = getDistance(child);
+      if (distance < minimum) {
+        index = i;
+        minimum = distance;
       }
     }
   }
-  if (minimum === 0) return null;
+  if (minimum === 0) fineshed = false;
   return children.get(index);
 };
 
-function getDistance (matriz) {
+function getDistance (matrizChild) {
   let distance = 0;
   for (let i = 0; i < matrizFinal.length; i++) {
     for (let j = 0; j < matrizFinal.length; j++) {
-      distance += calculateDistance(matriz, i, j);
+      distance += calculateDistance(matrizChild, i, j);
     }
   }
   return distance;
 };
 
-function calculateDistance (matriz, x, y) {
-  var original = matrizFinal[x][y];
-  for (let i = 0; i < matriz.length; i++) {
-    for (let j = 0; j < matriz.length; j++) {
-      let current = matriz[i][j];
+function calculateDistance (matrizChild, x, y) {
+  let current = matrizChild[x][y];
+  for (let i = 0; i < matrizFinal.length; i++) {
+    for (let j = 0; j < matrizFinal.length; j++) {
+      let original = matrizFinal[i][j];
       if (original === current) {
         let result = x-i < 0 ? (x-i)*-1 : x-i ;
         result += y-j < 0 ? (y-j)*-1 : y-j ;
