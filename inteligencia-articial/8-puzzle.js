@@ -2,10 +2,18 @@
 
 const Immutable = require('immutable');
 
+// work
+// const matrizInitial = Immutable.fromJS([
+//   [8, 7, 6],
+//   [5, 0, 4],
+//   [3, 2, 1]
+// ]);
+
+// not work
 const matrizInitial = Immutable.fromJS([
-  [8, 7, 6],
-  [5, 0, 4],
-  [3, 2, 1]
+  [7, 2, 4],
+  [5, 0, 6],
+  [8, 3, 1]
 ]);
 
 const matrizFinal = [
