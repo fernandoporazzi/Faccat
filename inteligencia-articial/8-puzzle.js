@@ -17,16 +17,23 @@ const matrizFinal = [
 let matrizTemp = matrizInitial;
 let matrizExists = [];
 let fineshed = true;
-let count = 0;
+let iteration = 0;
 
 while (fineshed) {
   matrizExists.push(matrizTemp.toJS().toString());
+
   console.log('matriz current: ', matrizTemp.toJS());
+
   let children = getChildren(matrizTemp);
   console.log('children current: ', children.toJS());
+
   matrizTemp = getMinimumMatriz(children);
-  count += 1;
-  if (!fineshed) console.log('\n\ncount: %d - matriz final: ', count, matrizTemp.toJS());
+
+  iteration += 1;
+
+  console.log('\n\niteration: %d', iteration);
+
+  if (!fineshed) console.log('\n\nmatriz final: ', matrizTemp.toJS());
   console.log('\n\n');
 }
 
