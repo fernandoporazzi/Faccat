@@ -2,18 +2,10 @@
 
 const Immutable = require('immutable');
 
-// work
-// const matrizInitial = Immutable.fromJS([
-//   [8, 7, 6],
-//   [5, 0, 4],
-//   [3, 2, 1]
-// ]);
-
-// not work
 const matrizInitial = Immutable.fromJS([
-  [7, 2, 4],
-  [5, 0, 6],
-  [8, 3, 1]
+  [8, 7, 6],
+  [5, 0, 4],
+  [3, 2, 1]
 ]);
 
 const matrizFinal = [
@@ -53,7 +45,7 @@ function getMinimumMatriz (children) {
 
     let exists = matrizExists.filter(matriz => matriz == child.toString())[0];
     if (!exists) {
-      let distance = getDistance(child);
+      let distance = getDistanceManhattan(child);
       if (distance < minimum) {
         index = i;
         minimum = distance;
@@ -64,26 +56,27 @@ function getMinimumMatriz (children) {
   return children.get(index);
 };
 
-function getDistance (matrizChild) {
+function getDistanceManhattan (matrizChild) {
   let distance = 0;
+  let misplaced = 0;
   for (let i = 0; i < matrizFinal.length; i++) {
     for (let j = 0; j < matrizFinal.length; j++) {
-      distance += calculateDistance(matrizChild, i, j);
+      var result = calculateDistanceManhattan(matrizChild, i, j);
+      distance += result;
+      if (result !== 0) misplaced += 1;
     }
   }
-  return distance;
+  return distance + misplaced;
 };
 
-function calculateDistance (matrizChild, x, y) {
+function calculateDistanceManhattan (matrizChild, x, y) {
   let current = matrizChild[x][y];
+  if (current === 0) return 0;
+
   for (let i = 0; i < matrizFinal.length; i++) {
     for (let j = 0; j < matrizFinal.length; j++) {
       let original = matrizFinal[i][j];
-      if (original === current) {
-        let result = x-i < 0 ? (x-i)*-1 : x-i ;
-        result += y-j < 0 ? (y-j)*-1 : y-j ;
-        return result;
-      }
+      if (original === current) return Math.abs(x-i) + Math.abs(y-j);
     }
   }
 };
@@ -120,7 +113,7 @@ function moveDown (matriz, i, j) {
   let matrizTemp = matriz.toJS();
 
   var next = i+1;
-  if (next > 2) return;
+  if (next > matrizFinal.length-1) return;
 
   let temp = matrizTemp[next][j];
   if (temp != 0) return;
@@ -150,7 +143,7 @@ function moveRigth (matriz, i, j) {
   let matrizTemp = matriz.toJS();
 
   var next = j+1;
-  if (next > 2) return;
+  if (next > matrizFinal.length-1) return;
 
   let temp = matrizTemp[i][next];
   if (temp != 0) return;
