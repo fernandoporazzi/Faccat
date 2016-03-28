@@ -1,0 +1,10 @@
+{
+  "name": "inteligencia-articial",
+  "version": "1.0.0",
+  "description": "",
+  "main": "8-puzzle.js",
+  "author": "Daniel Rôhers Moura <rohersmoura@gmail.com> (https://github.com/danielrohers)",
+  "dependencies": {
+    "immutable": "^3.7.6"
+  }
+}
