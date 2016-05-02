@@ -1,58 +1,78 @@
+// Matriz de origens e o custo até cada destino
 var graph = [
   {
-    0: {
-      to1: 2,
-      to2: 7,
-      to3: 3,
-      to4: 6
-    }
+    //0: {
+      1: 2,
+      2: 7,
+      3: 3,
+      4: 6
+    //}
   },
   {
-    1: {
-      to0: 2,
-      to2: 4,
-      to3: 3,
-      to4: 5
-    }
+    //1: {
+      0: 2,
+      2: 4,
+      3: 3,
+      4: 5
+    //}
   },
   {
-    2: {
-      to0: 7,
-      to1: 4,
-      to3: 7,
-      to4: 3
-    }
+    //2: {
+      0: 7,
+      1: 4,
+      3: 7,
+      4: 3
+    //}
   },
   {
-    3: {
-      to0: 3,
-      to1: 3,
-      to2: 7,
-      to4: 3
-    }
+    //3: {
+      0: 3,
+      1: 3,
+      2: 7,
+      4: 3
+    //}
   },
   {
-    4: {
-      to0: 6,
-      to1: 5,
-      to2: 3,
-      to3: 3
-    }
+    //4: {
+      0: 6,
+      1: 5,
+      2: 3,
+      3: 3
+    //}
   }
 ];
 
-for (var i = 0; i < graph.length; i++) {
-  var minRouteForCurrentIndex = getMinRoute(graph[i][i]);
+var starterPoint = 0;
+var hasVisited = [];
+var done = false;
+var nodesLength = 4;
 
-  console.log(minRouteForCurrentIndex, graph[i][i][minRouteForCurrentIndex]);
+// recebe o caminho mais curto a partid do índice inicial
+var minRouteForCurrentIndex = getMinRoute(graph[starterPoint]);
+
+//console.log(minRouteForCurrentIndex, graph[starterPoint][starterPoint][minRouteForCurrentIndex]);
+
+//hasVisited.push(minRouteForCurrentIndex);
+
+console.log('hasVisited', hasVisited);
+
+//
+
+while(nodesLength > 0) {
+  minRouteForCurrentIndex = getMinRoute(graph[minRouteForCurrentIndex]);
+  console.log('hasVisited', hasVisited);
+  nodesLength--;
 }
 
+
 function getMinRoute(argument) {
+  console.log('argument', argument);
   var arr = [],
     minPath;
 
   for (var property in argument) {
     if (argument.hasOwnProperty(property)) {
+      console.log(argument[property]);
       arr.push(argument[property]);
     }
   }
@@ -66,13 +86,14 @@ function getMinRoute(argument) {
 
       if (arr[0] === argument[property]) {
         minPath = property;
+        hasVisited.push(minPath);
         break;
       }
-
     }
   }
 
+  //getMinRoute(graph[minPath]);
+  //nodesLength--;
+
   return minPath;
 }
-
-
