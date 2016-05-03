@@ -1,18 +1,11 @@
 var cities = require('./cities');
 
-var chromosomesToBeGenerated = 10,
+var chromosomesToBeGenerated = 5,
   chromosomesList = [];
-
-function generateChromosomes() {
-  for (var i = 0; i < chromosomesToBeGenerated; i++) {
-    var shuffled = shuffleArray();
-
-    chromosomesList.push(shuffled);
-  }
-}
 
 function shuffleArray() {
   var array = cities;
+
   for (var i = array.length - 1; i > 0; i--) {
     var j = Math.floor(Math.random() * (i + 1));
     var temp = array[i];
@@ -22,12 +15,47 @@ function shuffleArray() {
   return array;
 }
 
+function generateChromosomes() {
+  var shuffled;
+
+  for (var i = 0; i < chromosomesToBeGenerated; i++) {
+    shuffled = shuffleArray();
+
+    console.log('fez shuffle');
+    console.log(shuffled);
+
+    // Since we need to go back to the origin point,
+    // we append the first child to the end of the list
+    // shuffled.push(shuffled[0]);
+
+    chromosomesList.push(shuffled);
+  }
+
+  console.log(chromosomesList);
+}
+
+function calculateFitness() {
+  var l = chromosomesList.length;
+
+  // loops through every chromosome
+  for (var i = 0; i < l; i++) {
+
+    console.log('______________________________________________________');
+    console.log('');
+
+    // loops through every chromosome city
+    for (var j = 0; j < chromosomesList[i].length; j++) {
+      console.log(chromosomesList[i][j].city);
+    }
+  }
+}
+
 function init() {
   generateChromosomes();
 
-  console.log(chromosomesList[0]);
-  console.log(chromosomesList[0][0]);
-  console.log(chromosomesList[0][1]);
+  //console.log(chromosomesList);
+
+  // calculateFitness();
 }
 
 init();
