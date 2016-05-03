@@ -1,3 +1,5 @@
+var Immutable = require('immutable');
+
 var cities = require('./cities');
 
 var chromosomesToBeGenerated = 5,
@@ -19,16 +21,16 @@ function generateChromosomes() {
   var shuffled;
 
   for (var i = 0; i < chromosomesToBeGenerated; i++) {
-    shuffled = shuffleArray();
+    shuffled = Immutable.fromJS(shuffleArray());
 
-    console.log('fez shuffle');
-    console.log(shuffled);
+    // console.log('fez shuffle');
+    // console.log(shuffled.toJS());
 
     // Since we need to go back to the origin point,
     // we append the first child to the end of the list
     // shuffled.push(shuffled[0]);
 
-    chromosomesList.push(shuffled);
+    chromosomesList.push(shuffled.toJS());
   }
 
   console.log(chromosomesList);
