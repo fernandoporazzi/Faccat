@@ -2,7 +2,7 @@ var Immutable = require('immutable');
 
 var cities = require('./cities');
 
-var chromosomesToBeGenerated = 5,
+var chromosomesToBeGenerated = 1000,
   chromosomesList = [];
 
 function shuffleArray() {
@@ -23,17 +23,12 @@ function generateChromosomes() {
   for (var i = 0; i < chromosomesToBeGenerated; i++) {
     shuffled = Immutable.fromJS(shuffleArray());
 
-    // console.log('fez shuffle');
-    // console.log(shuffled.toJS());
-
     // Since we need to go back to the origin point,
     // we append the first child to the end of the list
-    // shuffled.push(shuffled[0]);
+    shuffled = shuffled.push(shuffled.toJS()[0]);
 
     chromosomesList.push(shuffled.toJS());
   }
-
-  console.log(chromosomesList);
 }
 
 function calculateFitness() {
@@ -45,19 +40,57 @@ function calculateFitness() {
     console.log('______________________________________________________');
     console.log('');
 
+    chromosomesList[i].totalKM = 0;
+
     // loops through every chromosome city
-    for (var j = 0; j < chromosomesList[i].length; j++) {
-      console.log(chromosomesList[i][j].city);
+    for (var j = 0; j < chromosomesList[i].length - 1; j++) {
+      //console.log(chromosomesList[i][j].city);
+
+      // Loops through all destination and try to find the previous city
+      for (var k = 0; k < chromosomesList[i][j].to.length; k++) {
+        var self = chromosomesList[i][j].to[k];
+
+        if (self.city === chromosomesList[i][j + 1].city) {
+
+          console.log(chromosomesList[i][j].city, '->', self.city, ', km: ', self.km);
+          chromosomesList[i].totalKM = chromosomesList[i].totalKM + self.km;
+        }
+      }
     }
   }
 }
 
+function getBestRoute() {
+  var km = chromosomesList[0].totalKM,
+    route,
+    index;
+
+  for (var i = 0; i < chromosomesList.length; i++) {
+    var self = chromosomesList[i];
+
+    if (self.totalKM < km) {
+      km = self.totalKM;
+      route = self;
+      index = i;
+    }
+  }
+
+  return {
+    km: km,
+    route: route,
+    index: index
+  };
+}
+
 function init() {
+  console.time();
   generateChromosomes();
 
-  //console.log(chromosomesList);
+  calculateFitness();
 
-  // calculateFitness();
+  console.log(getBestRoute());
+  console.log('time: ');
+  console.timeEnd();
 }
 
 init();
