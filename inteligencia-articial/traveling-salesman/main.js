@@ -1,20 +1,38 @@
 var Immutable = require('immutable');
+var _ = require('underscore');
+var async = require('async');
 
 var cities = require('./cities');
 
 var chromosomesToBeGenerated = 1000,
+  ages = 100,
   chromosomesList = [];
 
-function shuffleArray() {
-  var array = cities;
+function start() {
+  async.each(_.range(ages), (i, cb) => {
+    console.log(`create age ${i}`);
+    createAge();
+    cb();
+  }, () => {
+    calculateFitness();
+    orderChromosomes();
+    console.log(chromosomesList[0]);
+  });
+  // for (var i = 0; i < ages; i++) {
+  //   console.log(`create age ${i}`);
+  // }
 
-  for (var i = array.length - 1; i > 0; i--) {
-    var j = Math.floor(Math.random() * (i + 1));
-    var temp = array[i];
-    array[i] = array[j];
-    array[j] = temp;
+}
+
+function createAge() {
+  if (chromosomesList.length === 0) {
+    generateChromosomes();
   }
-  return array;
+
+  calculateFitness();
+  orderChromosomes();
+  killWeak();
+  doCrossOver();
 }
 
 function generateChromosomes() {
@@ -37,8 +55,8 @@ function calculateFitness() {
   // loops through every chromosome
   for (var i = 0; i < l; i++) {
 
-    console.log('______________________________________________________');
-    console.log('');
+    // console.log('______________________________________________________');
+    // console.log('');
 
     chromosomesList[i].totalKM = 0;
 
@@ -52,13 +70,73 @@ function calculateFitness() {
 
         if (self.city === chromosomesList[i][j + 1].city) {
 
-          console.log(chromosomesList[i][j].city, '->', self.city, ', km: ', self.km);
+          //console.log(chromosomesList[i][j].city, '->', self.city, ', km: ', self.km);
           chromosomesList[i].totalKM = chromosomesList[i].totalKM + self.km;
         }
       }
     }
   }
 }
+
+function orderChromosomes() {
+  chromosomesList.sort((a, b) => {
+    return a.totalKM > b.totalKM;
+  });
+}
+
+function killWeak() {
+  chromosomesList = chromosomesList.splice(0, 800);
+}
+
+function doCrossOver() {
+  var children = [];
+
+  for (var i = 0; i < chromosomesList.length; i += 2) {
+    var half = Math.round(chromosomesList[i].length / 2);
+
+    var left = chromosomesList[i].slice(half);
+    var right = chromosomesList[i + 1];
+
+    var child = left;
+    var diff = [];
+
+    //
+    for (var j = 0; j < right.length; j++) {
+      var self = right[j];
+      var exists = false;
+
+      for (var k = 0; k < child.length; k++) {
+        if (self.city === child[k].city) {
+          exists = true;
+          break;
+        }
+      }
+
+      if (!exists) {
+        diff.push(self);
+      }
+    }
+
+    child = Immutable.fromJS(child.concat(diff));
+
+    children.push(child.toJS());
+  }
+
+  chromosomesList = chromosomesList.concat(children);
+}
+
+function shuffleArray() {
+  var array = cities;
+
+  for (var i = array.length - 1; i > 0; i--) {
+    var j = Math.floor(Math.random() * (i + 1));
+    var temp = array[i];
+    array[i] = array[j];
+    array[j] = temp;
+  }
+  return array;
+}
+
 
 function getBestRoute() {
   var km = chromosomesList[0].totalKM,
@@ -84,12 +162,14 @@ function getBestRoute() {
 
 function init() {
   console.time();
-  generateChromosomes();
+  start();
 
-  calculateFitness();
+  //generateChromosomes();
 
-  console.log(getBestRoute());
-  console.log('time: ');
+  //calculateFitness();
+
+  //console.log(getBestRoute());
+  //console.log('time: ');
   console.timeEnd();
 }
 
