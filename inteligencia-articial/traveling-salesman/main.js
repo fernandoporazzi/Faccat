@@ -4,7 +4,7 @@ var async = require('async');
 
 var cities = require('./cities');
 
-var chromosomesToBeGenerated = 1000,
+var chromosomesToBeGenerated = 5000,
   ages = 100,
   chromosomesList = [];
 
@@ -16,12 +16,12 @@ function start() {
   }, () => {
     calculateFitness();
     orderChromosomes();
-    console.log(chromosomesList[0]);
-  });
-  // for (var i = 0; i < ages; i++) {
-  //   console.log(`create age ${i}`);
-  // }
 
+    for (var j = 0; j < chromosomesList[0].length; j++) {
+      console.log(chromosomesList[0][j].city);
+    }
+    console.log('Kilometros: ', chromosomesList[0].totalKM)
+  });
 }
 
 function createAge() {
@@ -54,23 +54,15 @@ function calculateFitness() {
 
   // loops through every chromosome
   for (var i = 0; i < l; i++) {
-
-    // console.log('______________________________________________________');
-    // console.log('');
-
     chromosomesList[i].totalKM = 0;
 
     // loops through every chromosome city
     for (var j = 0; j < chromosomesList[i].length - 1; j++) {
-      //console.log(chromosomesList[i][j].city);
-
       // Loops through all destination and try to find the previous city
       for (var k = 0; k < chromosomesList[i][j].to.length; k++) {
         var self = chromosomesList[i][j].to[k];
 
         if (self.city === chromosomesList[i][j + 1].city) {
-
-          //console.log(chromosomesList[i][j].city, '->', self.city, ', km: ', self.km);
           chromosomesList[i].totalKM = chromosomesList[i].totalKM + self.km;
         }
       }
@@ -85,7 +77,7 @@ function orderChromosomes() {
 }
 
 function killWeak() {
-  chromosomesList = chromosomesList.splice(0, 800);
+  chromosomesList = chromosomesList.splice(0, 4000);
 }
 
 function doCrossOver() {
@@ -163,13 +155,6 @@ function getBestRoute() {
 function init() {
   console.time();
   start();
-
-  //generateChromosomes();
-
-  //calculateFitness();
-
-  //console.log(getBestRoute());
-  //console.log('time: ');
   console.timeEnd();
 }
 
