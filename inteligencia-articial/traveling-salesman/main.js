@@ -4,7 +4,7 @@ var async = require('async');
 
 var cities = require('./cities');
 
-var chromosomesToBeGenerated = 5000,
+var chromosomesToBeGenerated = 1000,
   ages = 100,
   chromosomesList = [];
 
@@ -77,7 +77,7 @@ function orderChromosomes() {
 }
 
 function killWeak() {
-  chromosomesList = chromosomesList.splice(0, 4000);
+  chromosomesList = chromosomesList.splice(0, 800);
 }
 
 function doCrossOver() {
