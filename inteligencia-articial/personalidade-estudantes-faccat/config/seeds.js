@@ -2,6 +2,7 @@
 
 require('./mongoose');
 const QuestionModel = require('../app/models/question');
+const Cities = require('./cities');
 
 let questions = [
     {
@@ -94,8 +95,7 @@ let questions = [
 
     {
         question: 'Cidade',
-        options: [
-        ]
+        options: Cities
     },
 
     {
