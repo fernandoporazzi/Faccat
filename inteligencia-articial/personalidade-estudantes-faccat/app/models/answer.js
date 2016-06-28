@@ -13,23 +13,16 @@ const Answer = new Schema({
                 required: true
             },
             option: {
-                type: ObjectId,
-                ref: 'Option',
+                type: Number,
                 required: true
             }
         }
     ],
     output: {
-        type: String,
+        type: ObjectId,
+        ref: 'Course',
         required: true
     }
-});
-
-Answer.pre('save', function (next) {
-  this.input.question = slug(this.input.question);
-  this.input.option = slug(this.input.option);
-  this.output = slug(this.output);
-  next();
 });
 
 module.exports = mongoose.model('Answer', Answer);

@@ -21,7 +21,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-require('config/mongoose');
-require('config/routes');
+require('./config/mongoose');
+require('./config/routes')(app);
 
 module.exports = app;

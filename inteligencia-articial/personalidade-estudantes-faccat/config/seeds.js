@@ -2,62 +2,10 @@
 
 require('./mongoose');
 const QuestionModel = require('../app/models/question');
+const CourseModel = require('../app/models/course');
 const Cities = require('./cities');
 
 let questions = [
-    {
-        question: 'Curso',
-        options: [
-            { value: 'Administração' },
-            { value: 'Ciências Contábeis' },
-            { value: 'Design' },
-            { value: 'Direito' },
-            { value: 'Enfermagem' },
-            { value: 'Engenharia de Produção' },
-            { value: 'Gestão Comercial' },
-            { value: 'Gestão de Qualidade' },
-            { value: 'História' },
-            { value: 'Jogos Digitais' },
-            { value: 'Letras' },
-            { value: 'Matemática' },
-            { value: 'Pedagogia' },
-            { value: 'Psicologia' },
-            { value: 'Publicidade e Propaganda' },
-            { value: 'Relações Públicas' },
-            { value: 'Sistemas de Informação' },
-            { value: 'Sistemas para Internet' },
-            { value: 'Turismo' },
-            { value: 'Jornalismo' }
-        ]
-    },
-
-    {
-        question: 'Gostaria de trocar de curso?',
-        options: [
-            { value: 'Não' },
-            { value: 'Administração' },
-            { value: 'Ciências Contábeis' },
-            { value: 'Design' },
-            { value: 'Direito' },
-            { value: 'Enfermagem' },
-            { value: 'Engenharia de Produção' },
-            { value: 'Gestão Comercial' },
-            { value: 'Gestão de Qualidade' },
-            { value: 'História' },
-            { value: 'Jogos Digitais' },
-            { value: 'Letras' },
-            { value: 'Matemática' },
-            { value: 'Pedagogia' },
-            { value: 'Psicologia' },
-            { value: 'Publicidade e Propaganda' },
-            { value: 'Relações Públicas' },
-            { value: 'Sistemas de Informação' },
-            { value: 'Sistemas para Internet' },
-            { value: 'Turismo' },
-            { value: 'Jornalismo' }
-        ]
-    },
-
     {
         question: 'Sexo',
         options: [
@@ -297,7 +245,33 @@ let questions = [
     }
 ];
 
-QuestionModel.create(questions, err => {
+let courses = [
+    { name: 'Administração' },
+    { name: 'Ciências Contábeis' },
+    { name: 'Design' },
+    { name: 'Direito' },
+    { name: 'Enfermagem' },
+    { name: 'Engenharia de Produção' },
+    { name: 'Gestão Comercial' },
+    { name: 'Gestão de Qualidade' },
+    { name: 'História' },
+    { name: 'Jogos Digitais' },
+    { name: 'Letras' },
+    { name: 'Matemática' },
+    { name: 'Pedagogia' },
+    { name: 'Psicologia' },
+    { name: 'Publicidade e Propaganda' },
+    { name: 'Relações Públicas' },
+    { name: 'Sistemas de Informação' },
+    { name: 'Sistemas para Internet' },
+    { name: 'Turismo' },
+    { name: 'Jornalismo' }
+];
+
+const cb = err => {
     if (err) return console.log('ERR: ', err);
     console.log('DONE');
-});
+};
+
+QuestionModel.create(questions, cb);
+CourseModel.create(courses, cb)
