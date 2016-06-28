@@ -4,23 +4,23 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 const mongooseSequence = require('mongoose-sequence');
 
+const OptionSchema = new Schema({
+    _id: Number,
+    value: {
+        type: String,
+        required: true
+    }
+}, { _id: false });
+
+OptionSchema.plugin(mongooseSequence);
+
 const QuestionSchema = new Schema({
-    _id: {
-        type: Number
-    },
     question: {
         type: String,
         required: true,
         unique: true
     },
-    options: [
-        {
-            type: String,
-            required: true
-        }
-    ]
-}, { _id: false });
-
-QuestionSchema.plugin(mongooseSequence);
+    options: [ OptionSchema ]
+});
 
 module.exports = mongoose.model('Question', QuestionSchema);

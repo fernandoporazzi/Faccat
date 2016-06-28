@@ -8,11 +8,13 @@ const Answer = new Schema({
     input: [
         {
             question: {
-                type: Number,
+                type: ObjectId,
+                ref: 'Question',
                 required: true
             },
             option: {
-                type: Number,
+                type: ObjectId,
+                ref: 'Option',
                 required: true
             }
         }
