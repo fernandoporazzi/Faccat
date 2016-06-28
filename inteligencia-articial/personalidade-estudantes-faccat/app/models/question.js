@@ -2,8 +2,12 @@
 
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const mongooseSequence = require('mongoose-sequence');
 
-const Question = new Schema({
+const QuestionSchema = new Schema({
+    _id: {
+        type: Number
+    },
     question: {
         type: String,
         required: true,
@@ -15,6 +19,8 @@ const Question = new Schema({
             required: true
         }
     ]
-});
+}, { _id: false });
 
-module.exports = mongoose.model('Question', Question);
+QuestionSchema.plugin(mongooseSequence);
+
+module.exports = mongoose.model('Question', QuestionSchema);
