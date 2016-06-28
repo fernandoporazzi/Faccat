@@ -1,0 +1,28 @@
+extends layout
+
+block content
+
+  form(method="POST", action="#{isStudent ? '/' : '/find'}")
+    
+    if isStudent
+      .form-group
+        label(for="course") Curso
+        select.form-control(id="course" name="course")
+          each course in courses
+            option(value="#{course._id}") #{course.name}
+
+      .form-group
+        label(for="other_course") Gostaria de trocar de curso?
+        select.form-control(id="other_course" name="other_course")
+          option(value="") Não
+          each course in courses
+            option(value="#{course._id}") #{course.name}
+
+    each question in questions
+      .form-group
+        label(for="#{question._id}") #{question.question}
+        select.form-control(name="#{question._id}")
+          each option in question.options
+            option(value="#{option._id}") #{option.value}
+
+    button.btn.btn-primary(type="submit") Salvar

@@ -37,20 +37,44 @@ const _train = body => {
     });
 };
 
-// public
-module.exports = {
-
-    render_index : (req, res, next) => {
+const _getQuestions = () => {
+    return new Promise((resolve, reject) => {
         async.parallel({
             courses : cb => CourseModel.find({}).sort('name').exec(cb),
             questions : cb => QuestionModel.find({}, cb)
         }, (err, result) => {
-            if (err) return next(err);
-            res.render('index', {
+            if (err) return reject(err);
+            resolve({
                 courses: result.courses,
                 questions: result.questions
             });
         });
+    });
+};
+
+// public
+module.exports = {
+
+    render_index : (req, res) => {
+        res.render('index');
+    },
+
+    render_student : (req, res, next) => {
+        _getQuestions()
+            .then(data => {
+                data.isStudent = true;
+                res.render('question', data);
+            })
+            .catch(next);
+    },
+
+    render_find : (req, res, next) => {
+        _getQuestions()
+            .then(data => {
+                data.isStudent = false;
+                res.render('question', data);
+            })
+            .catch(next);
     },
 
     create : (req, res) => {
